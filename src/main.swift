@@ -43,7 +43,6 @@ public func CGSCopyActiveMenuBarDisplayIdentifier(_ connection: Int32) -> CFStri
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var updateTimer: Timer?
-    private var activeWorkspace: ActiveWorkspace!
     private var lastActiveSpace: Int32 = 0  // Add this to track the last space
     private var backgroundColor: NSColor {
         if #available(macOS 10.14, *) {
@@ -58,9 +57,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: squareSize)
-        
-        // Initialize ActiveWorkspace with self as delegate
-        activeWorkspace = ActiveWorkspace(delegate: self)
         
         // Configure the status item
         statusItem.isVisible = true
@@ -202,51 +198,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                   let button = self.statusItem.button else { return }
             button.layer?.backgroundColor = self.backgroundColor.cgColor
         }
-    }
-}
-
-class ActiveWorkspace {
-    private let workspace = NSWorkspace.shared
-    private weak var delegate: AppDelegate?
-    
-    init(delegate: AppDelegate) {
-        self.delegate = delegate
-    }
-    
-    func activateApp(_ bundleId: String) {
-        // Get all running applications
-        let runningApps = workspace.runningApplications
-        
-        // Find the app with matching bundle ID
-        if let app = runningApps.first(where: { $0.bundleIdentifier == bundleId }) {
-            // Use the new cooperative activation API
-            app.activate()
-            // Update the workspace info after activation
-            delegate?.updateWorkspaceInfo()
-        }
-    }
-    
-    func launchApp(_ bundleId: String) {
-        guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleId) else {
-            print("Could not find application with bundle ID: \(bundleId)")
-            return
-        }
-        
-        let config = NSWorkspace.OpenConfiguration()
-        
-        // Launch the app asynchronously using the app URL
-        workspace.openApplication(at: appURL,
-                               configuration: config,
-                               completionHandler: { [weak self] running, error in
-            if let error = error {
-                print("Failed to launch app: \(error.localizedDescription)")
-            } else {
-                // Update the workspace info after successful launch
-                DispatchQueue.main.async {
-                    self?.delegate?.updateWorkspaceInfo()
-                }
-            }
-        })
     }
 }
 
