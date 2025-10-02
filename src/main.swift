@@ -46,7 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var lastActiveSpace: Int32 = 0  // Add this to track the last space
     private var backgroundColor: NSColor {
         if #available(macOS 10.14, *) {
-            return NSColor.controlAccentColor.withAlphaComponent(0.8)
+            return NSColor.systemGray.withAlphaComponent(0.8)
         } else {
             return NSColor.systemBlue.withAlphaComponent(0.8)
         }
