@@ -52,8 +52,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     private let textColor = NSColor.white
-    private let squareSize: CGFloat = 24  // Increased from 18 to allow for padding
-    private let horizontalPadding: CGFloat = 6  // 3 points on each side
+    private let squareSize: CGFloat = 22  // Increased from 18 to allow for padding
+    private let horizontalPadding: CGFloat = 4  // 2 points on each side
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: squareSize)
