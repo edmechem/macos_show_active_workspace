@@ -46,14 +46,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var lastActiveSpace: Int32 = 0  // Add this to track the last space
     private var backgroundColor: NSColor {
         if #available(macOS 10.14, *) {
-            return NSColor.systemGray.withAlphaComponent(0.8)
+            return NSColor.init(red: 0.3, green: 0.3, blue: 0.3, alpha: 0.8)
         } else {
             return NSColor.systemBlue.withAlphaComponent(0.8)
         }
     }
     private let textColor = NSColor.white
-    private let squareSize: CGFloat = 20  // Increased from 18 to allow for padding
-    private let horizontalPadding: CGFloat = 2  // 1 point on each side
+    private let squareSize: CGFloat = 24  // Increased from 18 to allow for padding
+    private let horizontalPadding: CGFloat = 6  // 3 points on each side
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: squareSize)
@@ -128,7 +128,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Create attributed string for the number
         let attrs: [NSAttributedString.Key: Any] = [
             .foregroundColor: textColor,
-            .font: NSFont.systemFont(ofSize: 13, weight: .medium)
+            .font: NSFont.systemFont(ofSize: 14, weight: .regular)
         ]
         let attributedString = NSAttributedString(string: "\(number)", attributes: attrs)
         
